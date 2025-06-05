@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Heading,
@@ -9,6 +9,7 @@ import {
   FormLabel,
   VStack,
   useToast,
+  Select,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
@@ -23,7 +24,31 @@ export const NewEventPage = () => {
     startTime: "",
     endTime: "",
     image: "",
+    category: "",
   });
+
+
+  const [categories, setCategories] = useState([]);
+  
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/categories");
+        if (!res.ok) throw new Error("Failed to fetch categories");
+        const data = await res.json();
+        setCategories(data);
+      } catch (err) {
+        toast({
+          title: "Error loading categories",
+          description: err.message,
+          status: "error",
+          duration: 4000,
+          isClosable: true,
+        });
+      }
+    };
+    fetchCategories();
+  }, [toast]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -118,6 +143,22 @@ export const NewEventPage = () => {
           <FormControl>
             <FormLabel>Image URL</FormLabel>
             <Input name="image" value={form.image} onChange={handleChange} />
+          </FormControl>
+
+          <FormControl>
+            <FormLabel>Category</FormLabel>
+            <Select
+              name="category"
+              value={form.category}
+              onChange={handleChange}
+              placeholder="Select category"
+            >
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+            </Select>
           </FormControl>
 
           <Button colorScheme="teal" type="submit" mt={4}>
