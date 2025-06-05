@@ -25,6 +25,7 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
   useToast,
+  Select,
 } from "@chakra-ui/react";
 import { useState, useRef } from "react";
 
@@ -57,6 +58,7 @@ export const EventPage = () => {
     image: event.image,
     startTime: event.startTime,
     endTime: event.endTime,
+    categoryIds: event.categoryIds || [],
   });
 
   const toast = useToast();
@@ -217,6 +219,17 @@ export const EventPage = () => {
                   setFormData({ ...formData, endTime: e.target.value })
                 }
               />
+              <Select
+                placeholder="Select category"
+                value={formData.categoryIds[0] || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, categoryIds: [parseInt(e.target.value)] })}>
+              {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+              {cat.name}
+              </option>
+                ))}
+              </Select>
             </Stack>
           </ModalBody>
 

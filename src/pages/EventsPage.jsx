@@ -41,7 +41,7 @@ export const EventsPage = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
 
   const handleCategoryChange = (selected) => {
-    setSelectedCategories(selected);
+    setSelectedCategories(selected.map(Number));
   };
 
   const filteredEvents = events.filter((event) => {
@@ -51,8 +51,7 @@ export const EventsPage = () => {
 
     const matchesCategory =
       selectedCategories.length === 0 ||
-      event.categoryIds.some((id) => selectedCategories.includes(String(id)));
-
+      event.categoryIds.every((id) => selectedCategories.includes((id)));
     return matchesSearch && matchesCategory;
   });
 
@@ -86,12 +85,12 @@ export const EventsPage = () => {
           Filter by Category:
         </Text>
         <CheckboxGroup
-          value={selectedCategories}
+          value={selectedCategories.map(String)}
           onChange={handleCategoryChange}
         >
           <Stack direction="row" wrap="wrap">
             {categories.map((cat) => (
-              <Checkbox key={cat.id} value={cat.id}>
+              <Checkbox key={cat.id} value={cat.id.toString()}>
                 {cat.name}
               </Checkbox>
             ))}
