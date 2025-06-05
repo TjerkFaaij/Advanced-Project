@@ -44,16 +44,18 @@ export const EventsPage = () => {
     setSelectedCategories(selected.map(Number));
   };
 
-  const filteredEvents = events.filter((event) => {
-    const matchesSearch =
-      event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      event.description.toLowerCase().includes(searchTerm.toLowerCase());
+const filteredEvents = events.filter((event) => {
+  const matchesSearch =
+    event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    event.description.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesCategory =
-      selectedCategories.length === 0 ||
-      event.categoryIds.every((id) => selectedCategories.includes((id)));
-    return matchesSearch && matchesCategory;
-  });
+  const matchesCategory =
+    selectedCategories.length === 0 ||
+    selectedCategories.every((id) => event.categoryIds.includes(id));
+
+  return matchesSearch && matchesCategory;
+});
+
 
   return (
     <Box p={6}>
